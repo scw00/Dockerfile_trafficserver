@@ -28,6 +28,7 @@ RUN apt-get install -y          \
             libjemalloc-dev
 
 WORKDIR /opt
+USER scw00
 
 RUN ldconfig
 
