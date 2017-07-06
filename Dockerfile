@@ -54,7 +54,7 @@ RUN git clone --depth 1 https://github.com/apache/trafficserver.git
 RUN cd trafficserver &&                 \
     git submodule update --depth 1 &&   \
     autoreconf -if &&                   \
-    ./configure --enable-spdy &&        \
+    ./configure  --prefix=/home/scw00/run_dir CCASFLAGS='-g -O0' CXXFLAGS='-g -O0' --with-user=scw00 -with-group=scw00 &&        \
     make &&                             \
     make check &&                       \
     make install
