@@ -27,37 +27,16 @@ RUN apt-get install -y          \
             libjansson-dev      \
             libjemalloc-dev
 
-WORKDIR /opt
+RUN useradd -ms /bin/bash scw00
+
 USER scw00
-
-RUN ldconfig
-
-RUN git clone --depth 1 https://github.com/tatsuhiro-t/spdylay.git
-RUN cd spdylay &&       \
-    autoreconf -i &&    \
-    automake &&         \
-    autoconf &&         \
-    ./configure &&      \
-    make &&             \
-    make install
-
-RUN git clone --depth 1 https://github.com/tatsuhiro-t/nghttp2.git
-RUN cd nghttp2 &&               \
-    autoreconf -i &&            \
-    automake &&                 \
-    autoconf &&                 \
-    ./configure --enable-app && \
-    make &&                     \
-    make install
+WORKDIR /home/scw00
 
 RUN git clone --depth 1 https://github.com/apache/trafficserver.git
 RUN cd trafficserver &&                 \
     git submodule update --depth 1 &&   \
     autoreconf -if &&                   \
-    ./configure  --prefix=/home/scw00/run_dir CCASFLAGS='-g -O0' CXXFLAGS='-g -O0' --with-user=scw00 -with-group=scw00 &&        \
+    ./configure  --prefix=/home/scw00/run_dir CCASFLAGS='-g -O0' CXXFLAGS='-g -O0' --with-user=scw00 --with-group=scw00 --enable-experimental-plugins&&        \
     make &&                             \
-    make check &&                       \
     make install
 
-RUN ldconfig
-CMD service rsyslog start
